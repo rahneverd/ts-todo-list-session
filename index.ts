@@ -16,6 +16,7 @@ while (isRunning) {
         "Add Todo",
         "View Todos",
         "Delete Todo",
+        "Edit Todo",
         "Quit"
       ]
     }
@@ -36,15 +37,38 @@ while (isRunning) {
       console.table(todoList)
       break
     case "Delete Todo":
-      const index = await inquirer.prompt([
+      const deleteIndex = await inquirer.prompt([
         {
           type: "number",
           name: "index",
           message: "What index do you want to delete?"
         }
       ])
-      todoList.splice(index.index, 1)
+      if (todoList[deleteIndex.index]) {
+        todoList.splice(deleteIndex.index, 1)
+      } else {
+        console.log('Todo not found')
+      }      
       break
+    case "Edit Todo":
+      const editIndex = await inquirer.prompt([
+        {
+          type: "number",
+          name: "index",
+          message: "What index do you want to edit?"
+        }
+      ])
+      const newTodo = await inquirer.prompt([
+        {
+          type: "input",
+          name: "todo",
+          message: `${todoList[editIndex.index]}: `
+        }
+      ])
+      todoList[editIndex.index] = newTodo.todo
+      // todoList.splice(editIndex.index, 1)
+      break
+
     case "Quit":
       isRunning = false
       break
